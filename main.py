@@ -17,6 +17,7 @@ def mensagem(instance: str, number: str, text: str):
         "Content-Type": "application/json",
         "apikey": apikey
     })
+    return "OK"
 
 mensagem("leandro", "5511948447544", 'Olá, sou eu!')
 models.Base.metadata.create_all(bind=engine)
@@ -25,16 +26,12 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Logistics Management API")
 
-def mensagem(instance: str, number: int, text:str):
-    r = requests.post(f'http://192.168.1.171:8080/message/sendText/{str.strip(instance)}', 
-                                data={"number": number, "text": text}, 
-                                headers={"Content-Type":"applcation/json", "apikey": apikey
-                            }
-                        )
-
 # --- WHATSAPP MESSAGES ---
 
-
+@app.post("/teste/")
+def send_message():
+    mensagem("leandro", "5511948447544", "Olá, Teste de API!")
+    return "OK"
 
 
 # --- DRIVERS ENDPOINTS ---
