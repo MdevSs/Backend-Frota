@@ -4,6 +4,8 @@ from typing import List
 import models, schemas, crud
 from database import engine, get_db
 import requests
+import json
+
 
 apikey = 'citrix21'
 # Nota: Em produção, você usaria migrations (Alembic). 
@@ -142,10 +144,14 @@ async def websocket_gps(websocket: WebSocket):
     while True:
         data= await websocket.receive_json();
 
+        with open('dados.json', 'r', encoding='utf-8') as arquivo:
+            data = json.load(arquivo)
+
         print(data)
 
         await websocket.send_text(f"Chegou! \n {data}")
     
+        await websocket.send_text(f"Chegou! \n {data['id']}")
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
