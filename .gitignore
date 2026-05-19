@@ -1,4 +1,5 @@
-_pycahce_/
+__pycahce__/
 Include/
 Lib/
 Scripts/
+pyvenv.cfg
