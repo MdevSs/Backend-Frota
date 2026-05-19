@@ -3,12 +3,26 @@ from sqlalchemy.orm import Session
 from typing import List
 import models, schemas, crud
 from database import engine, get_db
+import requests
 
+apikey = 'citrix21'
 # Nota: Em produção, você usaria migrations (Alembic). 
 # Aqui, garantimos que as tabelas existam se o usuário não importar o SQL manualmente.
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Logistics Management API")
+
+def mensagem(instance: str, number: int, text:str):
+    r = requests.post(f'http://192.168.1.171:8080/message/sendText/{str.strip(instance)}', 
+                                data={"number": number, "text": text}, 
+                                headers={"Content-Type":"applcation/json", "apikey": apikey
+                            }
+                        )
+
+# --- WHATSAPP MESSAGES ---
+
+
+
 
 # --- DRIVERS ENDPOINTS ---
 @app.post("/drivers/", response_model=schemas.Driver)
