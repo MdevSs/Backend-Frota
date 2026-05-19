@@ -10,19 +10,16 @@ apikey = 'citrix21'
 # Aqui, garantimos que as tabelas existam se o usuário não importar o SQL manualmente.
 
 def mensagem(instance: str, number: str, text: str):
-    r = requests.post(f"http://192.168.1.171:8080/message/sendText/{instance}", data={
+    r = requests.post(f"http://192.168.1.171:8080/message/sendText/{instance}", json={
         "number": number,
         "text": text
     }, headers={
         "Content-Type": "application/json",
         "apikey": apikey
     })
-    return "OK"
 
-mensagem("leandro", "5511948447544", 'Olá, sou eu!')
+
 models.Base.metadata.create_all(bind=engine)
-
-
 
 app = FastAPI(title="Logistics Management API")
 
