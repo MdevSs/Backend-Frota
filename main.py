@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, WebSocket
 from sqlalchemy.orm import Session
 from typing import List
 import models, schemas, crud
@@ -133,6 +133,20 @@ def delete_delivery(delivery_id: int, db: Session = Depends(get_db)):
     crud.delete_item(db, models.Delivery, delivery_id)
     return {"message": "Delivery deleted"}
 
+# --- WebSocket (GPS) ---
+
+@app.websocket("/gps")
+async def websocket_gps(websocket: WebSocket):
+    await websocket.accept()
+
+    while True:
+        data= await websocket.receive_json();
+
+        print(data)
+
+        await websocket.send_text(f"Chegou! \n {data}")
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
