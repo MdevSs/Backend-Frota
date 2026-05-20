@@ -25,6 +25,19 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Logistics Management API")
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # --- WHATSAPP MESSAGES ---
 
 @app.post("/teste/")
@@ -144,9 +157,6 @@ async def websocket_gps(websocket: WebSocket):
     while True:
         data= await websocket.receive_json();
 
-        with open('dados.json', 'r', encoding='utf-8') as arquivo:
-            data = json.load(arquivo)
-
         print(data)
 
         await websocket.send_text(f"Chegou! \n {data}")
@@ -154,5 +164,5 @@ async def websocket_gps(websocket: WebSocket):
         await websocket.send_text(f"Chegou! \n {data['id']}")
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
 
